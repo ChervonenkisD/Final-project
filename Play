@@ -1,0 +1,545 @@
+import pygame
+import random
+
+GREY = (170, 170, 170)
+WHITE = (255, 255, 255)
+BLAC = (29, 29, 29)
+
+SCREEN_WIDTH = 1400
+SCREEN_HEIGHT = 900
+FPS = 30
+a = 5
+
+#класс игрока
+class Player(pygame.sprite.Sprite):
+    
+    def __init__(self, x, y):
+        super().__init__()
+        #выбор одного из интерфейсов игры
+        if v ==1:
+            img ='player1.png'
+        if v ==2:
+            img ='player2.png'
+        if v ==3:
+            img ='player3.png'
+        if v ==4:
+            img ='player4.png'
+        if v ==5:
+            img ='player5.png'
+        if v ==6:
+            img ='player6.png'
+        
+        self.image = pygame.image.load(img).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+         
+        self.change_x = 0
+        self.change_y = 0
+        self.walls = None
+        
+        self.coins = None
+        self.collected_coins = 0
+        
+        #проверка на столкновения
+        self.enemies = pygame.sprite.Group()
+        self.alive = True
+        
+        self.impostor = pygame.sprite.Group()
+        self.alive = True
+        
+        self.vin = pygame.sprite.Group()
+        self.alive = True
+        self.ggg = ggg
+    
+    # обнавление координаты
+    def update(self):
+        self.rect.x += self.change_x
+        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+        for block in block_hit_list:
+            if self.change_x > 0:
+                self.rect.right = block.rect.left
+            else:
+                self.rect.left = block.rect.right
+                
+        self.rect.y += self.change_y
+        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+        for block in block_hit_list:
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+            else:
+                self.rect.top = block.rect.bottom
+                
+        coins_hit_list = pygame.sprite.spritecollide(self, self.coins, False)
+        for coin in coins_hit_list:
+            self.collected_coins += 1
+            coin.kill()
+            self.ggg = self.ggg + 1
+            
+        if pygame.sprite.spritecollideany(self, self.enemies, False):
+            self.a = 1
+            self.alive = False
+            
+        if pygame.sprite.spritecollideany(self, self.impostor, False):
+            self.a = 1
+            self.alive = False 
+            
+        if pygame.sprite.spritecollideany(self, self.vin, False):
+            self.a = 0
+            self.alive = False
+
+#Класс умного врага
+class Impostor(pygame.sprite.Sprite):
+    
+    def __init__(self, x, y):
+        super().__init__()
+        
+        if v ==1:
+            img ='impostor1.png'
+        if v ==2:
+            img ='impostor2.png'
+        if v ==3:
+            img ='impostor3.png'
+        if v ==4:
+            img ='impostor4.png'
+        if v ==5:
+            img ='impostor5.png'
+        if v ==6:
+            img ='impostor6.png' 
+        
+        self.image = pygame.image.load(img).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+         
+        self.change_x = 0
+        self.change_y = 0
+        self.walls = None
+        self.playerx = None
+        self.playery = None
+        
+        
+                    
+    def update(self):
+        
+        #проверка на видимость игрока
+        aa = self.rect.x
+        cc = player.rect.x
+        
+        bb = self.rect.y
+        dd = player.rect.y
+        
+        self.c = None
+        c=1
+        self.c = c
+        
+        for wall in wall_list:
+            ee = wall.x+0.01
+            ff = wall.y+0.01
+            gg = wall.width-0.02
+            hh = wall.height-0.02
+            if (aa-cc) != 0:
+                if not( (aa <= ee and cc <= ee) or (aa >= ee and cc >= ee) ):
+                    if ff <= ((bb-dd)/(aa-cc)*ee + bb - (bb-dd)/(aa-cc)*aa) and ((bb-dd)/(aa-cc)*ee + bb - (bb-dd)/(aa-cc)*aa) <= (ff+hh) :
+                        self.c = 0
+            if (aa-cc) == 0:
+                if not( (aa <= ee and cc <= ee) or (aa >= ee and cc >= ee) ):
+                    if aa == ee:
+                        self.с = 0
+            if (aa-cc) != 0:
+                    if not( (aa <= ee+gg and cc <= ee+gg) or (aa >= ee+gg and cc >= ee+gg) ):
+                        if ff <= ((bb-dd)/(aa-cc)*(ee+gg) + bb - (bb-dd)/(aa-cc)*aa) and ((bb-dd)/(aa-cc)*(ee+gg) + bb - (bb-dd)/(aa-cc)*aa) <= (ff+hh) :
+                            self.c = 0
+            if (aa-cc) == 0:
+                if not( (aa <= ee+gg and cc <= ee+gg) or (aa >= ee+gg and cc >= ee+gg) ):
+                    if aa == ee+gg:
+                        self.с = 0
+            if (bb-dd) != 0:
+                if not( (bb <= ff and dd <= ff) or (bb >= ff and dd >= ff) ):
+                    if ee <= ((aa-cc)/(bb-dd)*ff + aa - (aa-cc)/(bb-dd)*bb) and ((aa-cc)/(bb-dd)*ff + aa - (aa-cc)/(bb-dd)*bb) <= (ee+gg) :
+                        self.c = 0
+            if (bb-dd) == 0:
+                if not( (bb <= ff and dd <= ff) or (bb >= ff and dd >= ff) ):
+                    if bb == ff:
+                        self.с = 0
+            if (bb-dd) != 0:
+                if not( (bb <= ff+hh and dd <= ff+hh) or (bb >= ff+hh and dd >= ff+hh) ):
+                    if ee <= ((aa-cc)/(bb-dd)*(ff+hh) + aa - (aa-cc)/(bb-dd)*bb) and ((aa-cc)/(bb-dd)*(ff+hh) + aa - (aa-cc)/(bb-dd)*bb) <= ee+gg :
+                        self.c = 0
+            if (bb-dd) == 0:
+                if not( (bb <= ff+hh and dd <= ff+hh) or (bb >= ff+hh and dd >= ff+hh) ):
+                    if bb == ff+hh:
+                        self.с = 0 
+        
+        #движение умного врага когда он видит игрока
+        if self.c == 1 :
+            self.change_x = 2*((player.rect.x-impostor.rect.x)/((player.rect.y-impostor.rect.y)**2+(player.rect.x-impostor.rect.x)**2+0.0000000000001)**(1/2))
+            self.rect.x += self.change_x
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_x > 0:
+                    self.rect.right = block.rect.left
+                else:
+                    self.rect.left = block.rect.right
+            self.change_y = 2*(player.rect.y-impostor.rect.y)/((player.rect.y-impostor.rect.y)**2+(player.rect.x-impostor.rect.x)**2+0.00000000001)**(1/2)
+            self.rect.y += self.change_y
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_y > 0:
+                    self.rect.bottom = block.rect.top
+                else:
+                    self.rect.top = block.rect.bottom
+            self.aaa=0
+            
+        # движение если он его не видит игрока с отскоками от стен
+        if   self.c == 0:
+            if self.aaa == 0:
+                if self.eee == 0:
+                    self.change_x = random.randint(0, 2)
+                if self.eee == 1:
+                    self.change_x = random.randint(-2, 0)
+                self.aaa = 1 
+                self.eee = random.randint(0,1)
+                self.bbb = self.change_x
+                
+                if self.fff == 0:
+                    self.change_y= random.randint(0, 2)+0.01
+                if self.fff == 1:
+                    self.change_y= random.randint(-2, 0)-0.01
+                self.fff = random.randint(0,1)
+                self.ddd = self.change_y 
+                
+                
+            self.rect.x += self.bbb
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_x > 0:
+                    self.rect.right = block.rect.left
+                    self.aaa =0
+                    self.eee = 1
+                else:
+                    self.rect.left = block.rect.right
+                    self.aaa = 0
+                    self.eee = 0
+            self.rect.y += self.ddd
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_y > 0:
+                    self.rect.bottom = block.rect.top
+                    self.aaa= 0
+                    self.fff = 1
+                else:
+                    self.rect.top = block.rect.bottom
+                    self.aaa = 0
+                    self.fff = 0
+            print (self.aaa, self.fff, self.eee, self.change_y, self.change_x) 
+            if self.change_y == 0 and self.change_x == 0:
+                self.aaa = 0
+        #второй вариант броуновского движения упрощенный    
+        #if self.c == 0:
+         #   self.change_x = random.randint(-3, 3) 
+          #  self.rect.x += self.change_x
+           # block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            #for block in block_hit_list:
+             #   if self.change_x > 0:
+              #      self.rect.right = block.rect.left
+               # else:
+                #    self.rect.left = block.rect.right
+            #self.change_y= random.randint(-3, 3)
+            #self.rect.y += self.change_y
+            #block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            #for block in block_hit_list:
+             #   if self.change_y > 0:
+              #      self.rect.bottom = block.rect.top
+               # else:
+                #    self.rect.top = block.rect.bottom 
+
+#класс препядствий 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height):
+        super().__init__()
+        
+        self.image = pygame.Surface([width, height])
+        self.image.fill(BLAC)
+        
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+#класс монет
+class Coin(pygame.sprite.Sprite):
+    def __init__(self, x, y, img='coin.png'):
+        super().__init__()
+        
+        if v ==1:
+            img ='coin1.png'
+        if v ==2:
+            img ='coin2.png'
+        if v ==3:
+            img ='coin3.png'
+        if v ==4:
+            img ='coin4.png'
+        if v ==5:
+            img ='coin5.png'
+        if v ==6:
+            img ='coin6.png'
+        
+        self.image = pygame.image.load(img).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+#хороший выход из игы "врата из лабиринта"
+class Vin(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height):
+        super().__init__()
+        
+        self.image = pygame.Surface([width, height])
+        self.image.fill(WHITE)
+        
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
+#класс обычного врага
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y, img='enemy.png'):
+        super().__init__()
+        
+        if v ==1:
+            img ='enemy1.png'
+        if v ==2:
+            img ='enemy2.png'
+        if v ==3:
+            img ='enemy3.png'
+        if v ==4:
+            img ='enemy4.png'
+        if v ==5:
+            img ='enemy5.png'
+        if v ==6:
+            img ='enemy6.png'
+        
+        self.image = pygame.image.load(img).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        
+        self.start = x
+        self.stop = x + random.randint(180, 240)
+        self.direction = 1
+        
+    def update(self):
+        if self.rect.x >= self.stop:
+            self.rect.x = self.stop
+            self.direction = -1
+        if self.rect.x <= self.start:
+            self.rect.x = self.start
+            self.direction = 1
+        self.rect.x += self.direction*2
+pygame.init()
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+pygame.display.set_caption('Maze')
+
+
+all_sprite_list = pygame.sprite.Group()
+wall_list = pygame.sprite.Group()
+vin_list = pygame.sprite.Group()
+
+#случайный выбор дизайна
+v = 6 #random.randint(1, 6)
+if v==6:
+    GREY = (10, 50, 200)
+
+#массив препядствий
+wall_coords = [
+    [0, 890, 1400, 10],
+    [0, 0, 10, 900],
+    [500, 375, 10, 900],
+    [900, 825, 10, 75],
+    [1000, 825, 10, 75],
+    [1000, 825, 200, 10],
+    [600, 750, 10, 75],
+    [600, 825, 200, 10],
+    [1390, 0, 10, 900],
+    [500, 375, 400, 10],
+    [0, 0, 1400, 10],
+    [0, 150, 300, 10],
+    [0, 225, 200, 10],
+    [300, 75, 10, 150],
+    [300, 75, 200, 10],
+    [500, 75, 10, 150],
+    [400, 150, 10, 75],
+    [400, 225, 100, 10],
+    [500, 75, 10, 150],
+    [300, 300, 600, 10],
+    [600, 0, 10, 75],
+    [600, 75, 200, 10],
+    [600, 150, 200, 10],
+    [600, 150, 10, 150],
+    [700, 225, 200, 10],
+    [900, 0, 10, 300],
+    [1000, 0, 10, 450],
+    [600, 450, 300, 10],
+    [600, 525, 200, 10],
+    [600, 750,100, 10],
+    [700, 600, 100, 10],
+    [700, 600, 10, 150],
+    [1000, 525, 400, 10],
+    [1000, 525, 10, 225],
+    [1000, 750, 200, 10],
+    [1200, 600, 10, 150],
+    [1100, 75, 10, 375],
+    [1100, 75, 200, 10],
+    [1100, 225, 200, 10],
+    [1100, 300, 100, 10],
+    [1100, 450, 300, 10],
+    [1300, 75, 10, 75],
+    [1300, 225, 10, 75],
+    [1300, 375, 10, 75],
+    [1200, 150, 100, 10],
+    [1200, 375, 100, 10],
+    [900, 450, 10, 300],
+    [800, 600, 10, 150],
+]
+for coord in wall_coords:
+    wall = Wall(coord[0], coord[1], coord[2], coord[3])
+    wall_list.add(wall)
+    all_sprite_list.add(wall)
+
+#выход из лабиринта
+vin_coords = [
+    [1380, 450, 20, 75],
+]
+for coord in vin_coords:
+    vin = Vin(coord[0], coord[1], coord[2], coord[3])
+    vin_list.add(vin)
+    all_sprite_list.add(vin)
+    
+#число очков
+ggg = 0
+
+#массив манет
+coins_list = pygame.sprite.Group()
+coins_coord = [[250, 75], [100, 450], [360, 675], [800, 112.5], [800, 525], [850, 412,5], [900, 787.5], [1100, 37.5], [1100,600], [1250, 300], [1300, 675], [1350, 150]]
+
+for coord in coins_coord:
+    coin = Coin(coord[0], coord[1])
+    coins_list.add(coin)
+    all_sprite_list.add(coin)
+
+#масссив обычных врагов
+enemies_list = pygame.sprite.Group()
+enemies_coord = [[10, 500], [500, 75]]
+for coord in enemies_coord:
+    enemy = Enemy(coord[0], coord[1])
+    enemies_list.add(enemy)
+    all_sprite_list.add(enemy)
+    
+#начальные координата для умного врага
+player = Player(50,50)
+player.rect.x = 100
+player.rect.y = 50
+
+#умный враг
+impostor = Impostor(50, 750)
+impostor.aaa = 0
+impostor.ccc = 0
+impostor.eee = 0
+impostor.fff = 1
+impostor_list = pygame.sprite.Group()
+impostor_list.add(impostor)
+impostor.walls = wall_list
+all_sprite_list.add(impostor)
+
+#сам игрок
+player = Player(50,50)
+player_list = pygame.sprite.Group()
+player_list.add(player)
+all_sprite_list.add(player)
+player.walls = wall_list
+all_sprite_list.add(player)
+
+player.coins = coins_list
+
+player.enemies = enemies_list
+
+player.vin = vin_list
+
+player.impostor = impostor_list
+
+font = pygame.font.SysFont('Arial', 60, True)
+if v ==1:
+    text = font.render('ИГРА ОКОНЧЕНА, ВРАГИ ПОБЕДИЛИ', True, WHITE)
+if v ==2:
+    text = font.render('Ну, хотя бы котики наелись) А вы проиграли(', True, WHITE)
+if v ==3:
+    text = font.render('Имрерия нанесла ответный удар', True, WHITE)
+if v ==4:
+    text = font.render('Верховная жрица трех ликой богини победила', True, WHITE)
+if v ==5:
+    text = font.render('"Ценой чего?" Вы проиграли(', True, WHITE)
+if v ==6:
+    text = font.render('Бедные зайцы( Вы проиграли', True, WHITE)
+text_vin = font.render('Лабиринт пройден', True, WHITE)
+
+clock = pygame.time.Clock()
+done = False
+
+#тело программы
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.change_x = -3
+            elif event.key == pygame.K_RIGHT:
+                player.change_x = 3
+            elif event.key == pygame.K_UP:
+                player.change_y = -3
+            elif event.key == pygame.K_DOWN:
+                player.change_y = 3
+                
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                player.change_x = 0
+            elif event.key == pygame.K_RIGHT:
+                player.change_x = 0
+            elif event.key == pygame.K_UP:
+                player.change_y = 0
+            elif event.key == pygame.K_DOWN:
+                player.change_y = 0
+    screen.fill(GREY)
+    #вывод счета
+    string = 'SCORE: ' + str(player.ggg)
+
+    f1 = pygame.font.Font(None, 50)
+    text1 = f1.render(string, 1, (100, 0, 0))
+    screen.blit(text1, [1200, 20])
+    
+    #проверка на окончание игры
+    if not player.alive:
+        k = 1
+        if player.a==1:
+            screen.blit(text, (100, 100))
+        if player.a==0:
+            image = pygame.image.load('vin.png').convert_alpha()
+            rect = image.get_rect()
+            rect.x = 900
+            rect.y = 300
+            screen.blit(image, (300, 300))
+    else:
+        all_sprite_list.update()
+        all_sprite_list.draw(screen)
+        
+        
+        
+    pygame.display.flip()
+    clock.tick(60)
+
+pygeme.quit()
