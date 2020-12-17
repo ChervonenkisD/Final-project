@@ -554,9 +554,9 @@ while not done:
                 y=100
             image = pygame.image.load(img).convert_alpha()
             rect = image.get_rect()
-        rect.x = x
-        rect.y = y
-        screen.blit(image, (x, y))
+            rect.x = x
+            rect.y = y
+            screen.blit(image, (x, y))
     else:
         all_sprite_list.update()
         all_sprite_list.draw(screen)
